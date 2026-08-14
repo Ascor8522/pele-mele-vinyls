@@ -94,24 +94,24 @@ function vinylEmbed(vinyl: Vinyl): APIEmbed {
   return {
     title: vinyl.name,
     description: [
-      `__Name__: ${vinyl.nameCleaned}`,
+      `__Name__: ${vinyl.nameCleaned ?? "*unknown*"}`,
       `__Genre(s)__: ${vinyl.genres.join(", ")}`,
-      `__Label__: ${vinyl.label}`,
-      `__Year__: ${vinyl.year}`,
+      `__Label__: ${vinyl.label ?? "*unknown*"}`,
+      `__Year__: ${vinyl.year ?? "*unknown*"}`,
       ``,
-      `__Format__: ${vinyl.format}`,
+      `__Format__: ${vinyl.format ?? "*unknown*"}`,
       `__45t__: ${vinyl.is45t ? "yes" : "no"}`,
       ``,
       `__Price__: ${priceFmt.format(vinyl.price)}`,
       ``,
-      `__Links__: ` +
-      ` [Discogs](https://www.discogs.com/search?q=${nameEncoded})` +
-      ` [RateYourMusic](https://rateyourmusic.com/search?searchtype=l&searchterm=${nameEncoded})` +
+      `__Links__: `,
+      ` [Discogs](https://www.discogs.com/search?q=${nameEncoded}),` +
+      ` [RateYourMusic](https://rateyourmusic.com/search?searchtype=l&searchterm=${nameEncoded}),` +
       ` [MusicBrainz](https://musicbrainz.org/search?type=release&method=indexed&query=${nameEncoded})`,
-      ` [YouTube Music](https://music.youtube.com/search?q=${nameEncoded})` +
-      ` [YouTube](https://www.youtube.com/results?search_query=${nameEncoded})` +
+      ` [YouTube Music](https://music.youtube.com/search?q=${nameEncoded}),` +
+      ` [YouTube](https://www.youtube.com/results?search_query=${nameEncoded}),` +
       ` [SoundCloud](https://soundcloud.com/search?q=${nameEncoded})`,
-      ` [I'm Feeling Lucky](http://www.google.com/search?btnI=I'm+Feeling+Lucky&q=${nameEncoded})` +
+      ` [I'm Feeling Lucky](http://www.google.com/search?btnI=I'm+Feeling+Lucky&q=${nameEncoded}),` +
       ` [Google](https://www.google.com/search?q=${nameEncoded})`,
     ].join("\n"),
     url: vinyl.permalink,
