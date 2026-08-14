@@ -1,0 +1,19 @@
+{
+	"deploy": {
+		"org": "ascor8522",
+		"app": "pele-mele-vinyls"
+	},
+	"tasks": {
+		"start": "deno run --allow-env --allow-net src/mod.ts"
+	},
+	"unstable": [
+		"cron",
+		"kv"
+	],
+	"imports": {
+		"discord-api-types": "npm:discord-api-types@0.38.50/v10",
+		"openai": "npm:openai@6.48.0",
+		"@typewoo/sdk": "npm:@typewoo/sdk@3.7.6"
+	},
+	"nodeModulesDir": "none"
+}
