@@ -9,7 +9,7 @@
 			"DOM.Iterable"
 		],
 		"types": [
-			"@cloudflare/workers-types"
+			"node"
 		],
 		"strict": true,
 		"skipLibCheck": true,
@@ -17,6 +17,7 @@
 		"noEmit": true
 	},
 	"include": [
-		"src/**/*.ts"
+		"src/**/*.ts",
+		"./*.d.ts"
 	]
 }

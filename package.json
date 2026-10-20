@@ -8,9 +8,9 @@
 		"typecheck": "tsc --noEmit"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "5",
+		"@types/node": "26",
 		"@typewoo/sdk": "3",
-		"discord-api-types": "^0.38.50",
+		"discord-api-types": "^0.38.57",
 		"openai": "6",
 		"typescript": "7",
 		"wrangler": "4"

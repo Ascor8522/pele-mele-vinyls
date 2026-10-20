@@ -4,6 +4,7 @@
 	"main": "src/index.ts",
 	"compatibility_date": "2026-10-20",
 	"workers_dev": true,
+	"upload_source_maps": true,
 	"observability": {
 		"enabled": true
 	},
