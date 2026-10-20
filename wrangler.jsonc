@@ -1,0 +1,22 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "pele-mele-vinyls",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-10-20",
+	"workers_dev": true,
+	"observability": {
+		"enabled": true
+	},
+	"kv_namespaces": [
+		{
+			"binding": "KV",
+			"id": "5481bdd2b5d845d4992a5123817ea5e5",
+			"preview_id": "5481bdd2b5d845d4992a5123817ea5e5"
+		}
+	],
+	"triggers": {
+		"crons": [
+			"0 */3 * * *"
+		]
+	}
+}

@@ -1,11 +1,13 @@
-const key = ["pele-mele-vinlys", "lastFetch"] as const;
+const key = "pele-mele-vinyls:lastFetch";
 
-export function getLastFetch(kv: Deno.Kv) {
-  return kv
-    .get<Date>(key)
-    .then((entry) => entry.value);
+export async function getLastFetch(kv: KVNamespace): Promise<Date | null> {
+	const value = await kv.get(key);
+	if(!value) return null;
+
+	const date = new Date(value);
+	return Number.isNaN(date.getTime()) ? null : date;
 }
 
-export function setLastFetch(kv: Deno.Kv) {
-  return kv.set(key, new Date());
+export function setLastFetch(kv: KVNamespace): Promise<void> {
+	return kv.put(key, new Date().toISOString());
 }
