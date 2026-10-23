@@ -24,7 +24,7 @@ export async function onylDnbVinyls(vinyls: Vinyl[], openAiBearer: string): Prom
 	If you can't find anything about the record, you may trust his judgement.`;
 
 	const data = vinyls
-		.map((vinyl) => `- [ID: ${vinyl.id}] ${vinyl.name} (genre hint: ${vinyl.genres.join(", ")})`)
+		.map((vinyl) => `- [ID: ${vinyl.id}] ${vinyl.name} ${vinyl.genres.length ? `(genre hint: ${vinyl.genres.join(", ")})` : ""}`)
 		.join("\n");
 
 	const headers = {
