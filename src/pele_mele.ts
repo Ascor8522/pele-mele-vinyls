@@ -22,7 +22,7 @@ export async function* fetchAllNewVinyls(after: Date | null) {
 
 		url.searchParams.set("page", `${page++}`);
 
-		const products = await fetch(url, { signal: AbortSignal.timeout(10_000) })
+		const products = await fetch(url, { signal: AbortSignal.timeout(30_000) })
 			.then((res) => {
 				if(!res.ok) throw new Error(res.statusText);
 
