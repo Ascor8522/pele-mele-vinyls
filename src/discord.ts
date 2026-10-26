@@ -75,7 +75,10 @@ function vinylEmbed(vinyl: Vinyl): APIEmbed {
 		style: "currency",
 		currency: vinyl.currency,
 	});
-	const nameEncoded = encodeURIComponent(vinyl.name);
+	const nameEncoded = encodeURIComponent(
+		vinyl.name.replace(/\s*\([^()]*\)(?: 12")?$/, "")
+	)
+		.replace(/[!'()*]/g, c => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
 
 	return {
 		title: vinyl.name,
