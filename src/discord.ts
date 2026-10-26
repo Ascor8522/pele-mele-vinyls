@@ -88,7 +88,7 @@ function vinylEmbed(vinyl: Vinyl): APIEmbed {
 			`__Label__: ${vinyl.label ?? "*unknown*"}`,
 			`__Year__: ${vinyl.year ?? "*unknown*"}`,
 			``,
-			`__Format__: ${vinyl.format ?? "*unknown*"}`,
+			`__Format__: ${vinyl.formats?.join(", ") || "*unknown*"}`,
 			`__45t__: ${vinyl.is45t ? "yes" : "no"}`,
 			``,
 			`__Price__: ${priceFmt.format(vinyl.price)}`,

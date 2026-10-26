@@ -58,8 +58,26 @@ export async function* fetchAllNewVinyls(after: Date | null) {
 				.replace(currency_thousand_separator, "")
 				.replace(currency_decimal_separator, ".") /
 				(10 ** currency_minor_unit);
-
-			let is45t, nameCleaned, label, year, format; // TODO
+			let is45t,
+				nameCleaned,
+				label;  // TODO
+			const year = name.match(/\b(?:19|20)\d{2}(?:\s*-\s*(?:19|20)\d{2})?\b/);
+			const formats = name.match(new RegExp([
+				/LP/,
+				/RSD/,
+				/Comp/,
+				/Ltd/,
+				/RE/,
+				/RM/,
+				/RP/,
+				/Album/,
+				/PICTURE DISC/,
+				/\d+ lps/,
+				/\d+xLP/
+			]
+				.map(r => r.source)
+				.map(r => `(?:\b${r}\b)`)
+				.join("|"), "g")) ?? [];
 
 			console.log("found", name);
 
@@ -75,7 +93,7 @@ export async function* fetchAllNewVinyls(after: Date | null) {
 				nameCleaned,
 				label,
 				year,
-				format,
+				formats,
 			};
 		}
 	} while(page < maxPages!);
