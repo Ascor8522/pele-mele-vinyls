@@ -32,7 +32,10 @@ export async function onylDnbVinyls(vinyls: Vinyl[], openAiBearer: string): Prom
 		"Authorization": `Bearer ${openAiBearer}`,
 	};
 	const body = {
-		model: "gpt-4.1-mini",
+		model: "gpt-6-luna",
+		reasoning: {
+			effort: "none",
+		},
 		instructions,
 		text: {
 			format: {
@@ -55,7 +58,7 @@ export async function onylDnbVinyls(vinyls: Vinyl[], openAiBearer: string): Prom
 			},
 		},
 		tools: [
-			{ type: "web_search", search_context_size: "low" },
+			{ type: "web_search", search_context_size: "medium" },
 		],
 		input: data,
 	};
