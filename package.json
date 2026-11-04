@@ -11,7 +11,7 @@
 		"@types/node": "26",
 		"@typewoo/sdk": "3",
 		"discord-api-types": "^0.38.57",
-		"openai": "6",
+		"openai": "7",
 		"typescript": "7",
 		"wrangler": "4"
 	}

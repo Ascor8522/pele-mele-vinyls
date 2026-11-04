@@ -10,20 +10,18 @@ export async function onylDnbVinyls(vinyls: Vinyl[], openAiBearer: string): Prom
 	const excluded = ["chanson française", "country", "experimental", "classical", "ambient", "folk", "world"];
 
 	const instructions = `\
-You are a vinyl and Drum 'n Bass conoisseur looking trough bins at a flee market.
+I am a vinyl and Drum 'n Bass conoisseur looking trough bins at a flee market.
 
-You are primarily looking for anything ${tiers[0].join(", ")} in its sub-genres.
-You are also open to other closely related genres, like ${tiers[1].join(", ")}.
-In last resort, you also listen to *very popular/famous* ${tiers[2].join(", ")} songs.
-If the genres are one of ${excluded.join(", ")}, then you are not interested in it and should not pick it.
+I really like ${tiers[0].join(", ")}, or its sub-genres.
+I am also open to other closely related genres, like ${tiers[1].join(", ")}.
+In last resort, I also listen to *very popular/famous* ${tiers[2].join(", ")} songs.
 
-Your friend might also be giving hints about the genres of the disks.
-He is usually right, but you prefer to always look up the genre first in your knowledge base.
-If you can't find anything about the record, you may trust his judgement.`;
+However, I strongly dislike ${excluded.join(", ")}.
 
-	const data = vinyls
-		.map((vinyl) => `- [ID: ${vinyl.id}] ${vinyl.name} ${vinyl.genres.length ? `(genre hint: ${vinyl.genres.join(", ")})` : ""}`)
-		.join("\n");
+The seller sometimes gives hints about the genres of the disks.
+They are usually right but often very broad.
+I still prefer to always look up the genre first in my knowledge base.
+If I can't find anything about the record, then I might trust their judgement.`;
 
 	const headers = {
 		"Content-Type": "application/json",
@@ -31,62 +29,31 @@ If you can't find anything about the record, you may trust his judgement.`;
 	};
 	const body = {
 		model: "gpt-6-luna",
-		reasoning: {
-			effort: "none",
-		},
-		service_tier: "flex",
-		instructions,
-		text: {
-			format: {
-				type: "json_schema",
-				name: "finds",
-				strict: true,
-				schema: {
-					type: "object",
-					additionalProperties: false,
-					required: ["ids"],
-					properties: {
-						ids: {
-							type: "array",
-							items: {
-								type: "number",
-							},
-						},
-					},
-				},
-			},
-		},
-		tools: [
-			{ type: "web_search", search_context_size: "low" },
-		],
-		input: [
-			{ role: "system", content: "Return the IDs of the vinyls you might be interested in." },
-			{ role: "user", content: data },
-		],
+		input: instructions,
+		questions: vinyls.map(vinyl => ({
+			type: "predicate",
+			name: `${vinyl.id}`,
+			instructions: `Will I like the following vinyl: ${vinyl.name}${vinyl.name} ${vinyl.genres.length ? ` (genre hint: ${vinyl.genres.join(", ")})` : ""}?`,
+		})),
 	};
 
 	console.log("asking the AI gods");
 
-	const foundIds = await fetch("https://api.openai.com/v1/responses", {
+	const foundIds = await fetch("https://api.openai.com/v1/decisions", {
 		method: "POST",
 		headers,
 		body: JSON.stringify(body),
-		signal: AbortSignal.timeout(1000 * 60 * 20),
+		signal: AbortSignal.timeout(1000 * 60 * 2),
 	})
 		.then((res) => {
 			if(!res.ok) throw new Error(res.statusText);
-			return res.json() as Promise<openai.Responses.Response>;
+			return res.json() as Promise<openai.Decisions.Decision>;
 		})
 		.then((res) => res
-			.output
-			.filter((output): output is openai.Responses.ResponseOutputMessage => output.type === "message" && output.status === "completed")
-			.map((output) => output
-				.content
-				.filter((content): content is openai.Responses.ResponseOutputText => content.type === "output_text")
-				.map((content) => JSON.parse(content.text))
-				.map((obj) => obj.ids as number[])
-			)
-			.flat(2)
+			.answers
+			.filter((answer): answer is openai.Decision.AnswerResourcePredicate => "probability" in answer)
+			.filter(answer => answer.probability >= 0.4)
+			.map(answer => +answer.name!)
 		);
 
 	return vinyls.filter((vinyl) => foundIds.includes(vinyl.id));
